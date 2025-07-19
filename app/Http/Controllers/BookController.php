@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Http\Services\ImageService;
 use App\Models\Book;
 use App\Models\Cat;
 use App\Models\Author;
@@ -146,7 +148,10 @@ class BookController extends Controller
         ]);
         $data['date']=now();
         
-        $data['image']=Storage::putFile("img",$data['image']);
+        // $data['image']=Storage::putFile("img",$data['image']);
+        // $file=time() . "." . $request->file('image')->getClientOriginalExtension();
+        // $data['image']= $request->file('image')->storeAs("public/img",$file);
+           $data['image']=(new ImageService())->uploaded($request->file('image'),'img');
         Book::create($data);
 
         session()->flash('suc',"book added suc but admin approve it");
